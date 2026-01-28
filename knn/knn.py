@@ -18,8 +18,8 @@ class KNN():
 
     def predict_one(self,X):
         distances = [distance(X,x) for x in self.X]
-        k_indices = np.argsort(distances)[:self.k]
+        k_indices = np.argsort(distances)[:self.k] # get index of k-th somlest distance
         k_nearest_labels = [self.y[i] for i in k_indices]
-        return np.argmax(np.bincount(k_nearest_labels))
+        return np.argmax(np.bincount(k_nearest_labels)) # return frequintly appered
 
 
