@@ -5,25 +5,25 @@ class MulLinearRegression:
     def __init__(self, lr=0.001, epochs=100):
         # self.n=0
         # self.d = 0
-        # self._w = 0
+        self._w = None
         self._b = 0
         self.lr = lr
         self.epochs = epochs
-
-        self.losses = []
         self.losses = []
 
     def fit(self, X, y):
         X = np.array(X)
         y = np.array(y)
+
         self.n, self.d = X.shape
         self._w = np.zeros(self.d)
+
         for epoch in range(self.epochs):
             y_prd = np.dot(X, self._w) + self._b
             loss = self.loss(y, y_prd)
+            self.losses.append(loss)
             self.compute_grad(X, y, y_prd)
             # print(f"epoch={epoch}, w={self._w:.2f}, b={self._b:.2f} => loss={loss:.2f}")
-            # print(f"{epoch=:}, {self._w=:.2f}, {self._b=:.2f}=> {loss=:.2f}")
 
     def loss(self, y, y_prd):
         return (1 / self.n) * np.sum((y - y_prd) ** 2)
@@ -38,5 +38,7 @@ class MulLinearRegression:
         self._w -= self.lr * dw
         self._b -= self.lr * db
 
-    def pred(self, X_test):
+    def predict(self, X_test):
+        X_test = np.array(X_test)
+
         return np.dot(X_test, self._w) + self._b
