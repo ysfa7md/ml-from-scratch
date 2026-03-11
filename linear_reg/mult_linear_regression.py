@@ -1,20 +1,25 @@
 import numpy as np
 
+class MulLinearRegression:
 
-class LinearRegression:
     def __init__(self, lr=0.001, epochs=100):
-        self._w = 0
+        # self.n=0
+        # self.d = 0
+        # self._w = 0
         self._b = 0
-        self.n = 0
         self.lr = lr
         self.epochs = epochs
 
+        self.losses = []
+        self.losses = []
+
     def fit(self, X, y):
-        X = np.array(X).reshape(-1)
+        X = np.array(X)
         y = np.array(y)
-        self.n = len(X)
+        self.n, self.d = X.shape
+        self._w = np.zeros(self.d)
         for epoch in range(self.epochs):
-            y_prd = self._w * X + self._b
+            y_prd = np.dot(X, self._w) + self._b
             loss = self.loss(y, y_prd)
             self.compute_grad(X, y, y_prd)
             # print(f"epoch={epoch}, w={self._w:.2f}, b={self._b:.2f} => loss={loss:.2f}")
@@ -24,7 +29,7 @@ class LinearRegression:
         return (1 / self.n) * np.sum((y - y_prd) ** 2)
 
     def compute_grad(self, X, y, y_prd):
-        dw = (-2 / self.n) * np.sum(X * (y - y_prd))
+        dw = (-2 / self.n) * np.dot(X.T, (y - y_prd))
         db = (-2 / self.n) * np.sum((y - y_prd))
 
         self.update_parm(dw, db)
@@ -34,6 +39,4 @@ class LinearRegression:
         self._b -= self.lr * db
 
     def pred(self, X_test):
-        X_test = np.array(X_test).reshape(-1)
-        return self._w * X_test + self._b
-
+        return np.dot(X_test, self._w) + self._b
